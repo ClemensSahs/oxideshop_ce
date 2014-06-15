@@ -501,12 +501,14 @@ class DbRestore
               $oDB->Query($sQuery);
 
             } catch (\oxAdoDbException $exception) {
+
+              echo "\n";
               var_dump($sQuery);
 
+              echo "\n" . get_class($this) . "\n";
               echo $exception->getMessage() . "\n";
               echo $exception->getTraceAsString(). "\n";
-
-              exit;
+              throw $exception;
             }
         }
 
