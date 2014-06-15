@@ -496,8 +496,18 @@ class DbRestore
         $iMode = $this->getOutputMode();
 
         if ($iMode == self::MAINTENANCE_MODE_ONLYRESET || $iMode == self::MAINTENANCE_MODE_RESETANDOUTPUT) {
-            $oDB = oxDb::getDb();
-            $oDB->Query($sQuery);
+            try {
+              $oDB = oxDb::getDb();
+              $oDB->Query($sQuery);
+
+            } catch (\oxAdoDbException $exception) {
+              var_dump($sQuery);
+
+              echo $exception->getMessage() . "\n";
+              echo $exception->getTraceAsString(). "\n";
+
+              exit;
+            }
         }
 
         if ($sMessage) {
