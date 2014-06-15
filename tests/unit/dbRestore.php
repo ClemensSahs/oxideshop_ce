@@ -505,7 +505,6 @@ class DbRestore
               echo "\n";
               var_dump($sQuery);
 
-              echo "\n" . get_class($this) . "\n";
               echo $exception->getMessage() . "\n";
               echo $exception->getTraceAsString(). "\n";
               throw $exception;

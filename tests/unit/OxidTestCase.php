@@ -358,8 +358,13 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
         self::getSession()->cleanup();
         self::getConfig()->cleanup();
 
-        $oDbRestore = self::_getDbRestore();
-        $oDbRestore->restoreDB();
+        try {
+          $oDbRestore = self::_getDbRestore();
+          $oDbRestore->restoreDB();
+        } catch (\oxAdoDbException $exception) {
+          echo "\n\n" . get_class($this) . "\n\n\n";
+          throw $exception;
+        }
 
         if (function_exists('memory_get_usage')) {
             echo "\n" . round(memory_get_usage(1) / 1024 / 1024) . 'M (' . round(memory_get_peak_usage(1) / 1024 / 1024) . 'M)' . "\n";
