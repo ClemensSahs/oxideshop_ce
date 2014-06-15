@@ -3750,7 +3750,7 @@ INSERT INTO `oxartextends` (`OXID`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`
 # Data for promotions
 #
 
-INSERT INTO oxactions (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23) VALUES
+INSERT INTO `oxactions` (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23) VALUES
 ('oxstart','oxbaseshop','0','Startseite unten','Start page bottom','','','','','','','1','0000-00-00 00:00:00','0000-00-00 00:00:00','','','','','','','','','0','2014-06-15 00:44:39');
 
 INSERT INTO `oxactions` (`OXID`, `OXSHOPID`, `OXSORT`, `OXTYPE`, `OXTITLE`, `OXTITLE_1`, `OXTITLE_2`, `OXTITLE_3`, `OXLONGDESC`, `OXLONGDESC_1`, `OXLONGDESC_2`, `OXLONGDESC_3`, `OXACTIVE`, `OXACTIVEFROM`, `OXACTIVETO`) VALUES
