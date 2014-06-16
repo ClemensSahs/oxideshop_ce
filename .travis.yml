@@ -11,6 +11,7 @@ php:
 before_script:
   - composer self-update
   - composer install --dev --prefer-source;
+  - mysql -version
   - mysql -e "create database IF NOT EXISTS oxid_test;" -u root
 
 script:
