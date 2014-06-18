@@ -612,8 +612,17 @@ class DbRestore
         $sSQL = 'INSERT INTO ' . $sTable . ' ';
         $sColumns = '(';
         $sValues = '(';
+        $blColumnsInUse = false;
         foreach ($aRow as $sColumn => $sEntry) {
-            $sColumns .= $sColumn . ',';
+            if (is_string($sColumn)) {
+                $sColumns .= $sColumn . ',';
+                $blColumnsInUse = true;
+            } elseif (! $blColumnsInUse) {
+                throw new \RuntimeException(sprintf(
+                    "if one colum name is a integer, every else must be a integer. Given colum names (%s)",
+                    array_keys($aRow)
+                ));
+            }
             if (is_null($sEntry)) {
                 $sValues .= 'null,';
             } else {
