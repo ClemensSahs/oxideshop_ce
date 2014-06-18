@@ -127,7 +127,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
             $aTestDirectories = explode(',', TEST_DIRS );
             $oInterator = self::_getSuiteDirectories( $aTestDirectories );
         } else {
-          $oInterator = self::_getDirectoryTree( $aTestDirectories );
+            $oInterator = array(self::_getDirectoryTree( $aTestDirectories ));
         }
 
         return $oInterator;
@@ -164,7 +164,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
      */
     protected static function _getDirectoryTree( $aDirectories )
     {
-        return array(self::_getInteratorForDirectory($aDirectoryies));
+        return self::_getInteratorForDirectory($aDirectoryies);
     }
 
     /**
