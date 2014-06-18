@@ -617,7 +617,7 @@ class DbRestore
             if (is_string($sColumn)) {
                 $sColumns .= $sColumn . ',';
                 $blColumnsInUse = true;
-            } elseif (! $blColumnsInUse) {
+            } elseif ($blColumnsInUse) {
                 throw new \RuntimeException(sprintf(
                     "if one colum name is a integer, every else must be a integer. Given colum names (%s)",
                     array_keys($aRow)
