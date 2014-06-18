@@ -635,6 +635,9 @@ class DbRestore
         $sColumns .= ')';
         $sValues .= ')';
 
+        if (! $blColumnsInUse) {
+          $sColumns='';
+        }
         $sSQL .= $sColumns . ' VALUES ' . $sValues;
 
         return $sSQL;
