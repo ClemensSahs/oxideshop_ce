@@ -50,15 +50,16 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
      */
     public static function suite()
     {
-        $aTestDirectories = self::_getTestDirectories();
+        $oInterator = self::_getTestDirectories();
+        $oRecursiveInterator = new RecursiveArrayIteratorself($oInterator);
 
         $oSuite = new PHPUnit_Framework_TestSuite( 'PHPUnit' );
 
-        var_dump($aTestDirectories);
+        var_dump($oRecursiveInterator);
         echo "\n\n";
         $pattern = self::getTestFileFilter();
-        foreach ( $aTestDirectories as $sDirectory ) {
-            $aTestFiles = self::rsearch(__DIR__ . "/$sDirectory", $pattern);
+        foreach ( $oRecursiveInterator as $sDirectory ) {
+            $aTestFiles = self::_fileSearch(__DIR__ . "/$sDirectory", $pattern);
 
             if ( empty( $aTestFiles ) ) {
                 continue;
@@ -120,15 +121,16 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
     protected static function _getTestDirectories()
     {
         $aTestDirectories = self::$_aTestSuites;
+        $oInterator = null;
 
         if ( defined('TEST_DIRS') && TEST_DIRS ) {
-            $aTestDirectories = array();
-            foreach ( explode(',', TEST_DIRS ) as $sTestSuiteParts ) {
-                $aTestDirectories = array_merge( $aTestDirectories, self::_getSuiteDirectories( $sTestSuiteParts ) );
-            }
-    }
+            $aTestDirectories = explode(',', TEST_DIRS );
+            $oInterator = self::_getSuiteDirectories( $aTestDirectories );
+        } else {
+          $oInterator = self::_getDirectoryTree( $aTestDirectories );
+        }
 
-        return  array_merge( $aTestDirectories, self::_getDirectoryTree( $aTestDirectories ) );
+        return $oInterator;
     }
 
     /**
@@ -144,13 +146,14 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
         list( $sSuiteKey, $sSuiteTests ) = explode(':', $sTestSuiteParts);
         if ( !empty( $sSuiteTests ) ) {
             foreach ( explode('%', $sSuiteTests) as $sSubDirectory ) {
-                $sSubDirectory = ( $sSubDirectory == "_root_")? "" : '/'.$sSubDirectory;
-                $aDirectories[] = "${sSuiteKey}${sSubDirectory}";
+                $sSubDirectory = ( $sSubDirectory == "_root_")? "" : '/'.$sSubDirectory;                $aDirectories[] = "${sSuiteKey}${sSubDirectory}";
+                $aDirectories[] = self::_getDirectoryTree("${sSuiteKey}${sSubDirectory}");
             }
         } else {
-            $aDirectories[] = $sSuiteKey;
+            $aDirectories[] = self::_getDirectoryTree($sSuiteKey);
         }
-        return $aDirectories;
+
+        return new RecursiveArrayIterator($aDirectories);
     }
 
     /**
@@ -161,25 +164,36 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
      */
     protected static function _getDirectoryTree( $aDirectories )
     {
-        $aTree = array();
-
-        foreach ( $aDirectories as $sDirectory ) {
-            $aTree = array_merge( $aTree, array_diff( glob( $sDirectory . "/*", GLOB_ONLYDIR ), array('.', '..') ) );
-        }
-
-        if ( !empty( $aTree ) ) {
-            $aTree = array_merge( $aTree, self::_getDirectoryTree( $aTree ) );
-        }
-        return $aTree;
+        return array(self::_getInteratorForDirectory($aDirectoryies));
     }
 
     /**
      * found on http://thephpeffect.com/recursive-glob-vs-recursive-directory-iterator/
      */
-    protected static function rsearch($folder, $pattern) {
-        $dir = new RecursiveDirectoryIterator($folder);
-        $ite = new RecursiveIteratorIterator($dir);
-        $files = new RegexIterator($ite, $pattern, RegexIterator::GET_MATCH);
+    protected static function _getInteratorForDirectory($directory) {
+        $dir = new RecursiveDirectoryIterator($directory);
+
+        return $dir;
+    }
+
+    /**
+     * found on http://thephpeffect.com/recursive-glob-vs-recursive-directory-iterator/
+     */
+    protected static function _rsearch($folder, $pattern) {
+        $ite = new RecursiveIteratorIterator(self::_getInteratorForDirectory($folder));
+
+        return self::_fileSearch($ite, $pattern);
+    }
+
+    /**
+     * found on http://thephpeffect.com/recursive-glob-vs-recursive-directory-iterator/
+     */
+    protected static function _fileSearch($directoryInterator, $pattern) {
+        if (! $directoryInterator instanceof \Iterator ) {
+            $directoryInterator = new DirectoryIterator($directoryInterator);
+        }
+
+        $files = new RegexIterator($directoryInterator, $pattern, RegexIterator::GET_MATCH);
         $fileList = array();
         foreach($files as $file) {
             $fileList = array_merge($fileList, $file);
