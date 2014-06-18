@@ -127,6 +127,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
             $aTestDirectories = explode(',', TEST_DIRS );
             $oInterator = self::_getSuiteDirectories( $aTestDirectories );
         } else {
+            var_dump($aTestDirectories);
             $oInterator = array(self::_getDirectoryTree( $aTestDirectories ));
         }
 
