@@ -54,6 +54,8 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
 
         $oSuite = new PHPUnit_Framework_TestSuite( 'PHPUnit' );
 
+        var_dump($aTestDirectories);
+        echo "\n\n";
         $pattern = self::getTestFileFilter();
         foreach ( $aTestDirectories as $sDirectory ) {
             $aTestFiles = self::rsearch(__DIR__ . "/$sDirectory", $pattern);
