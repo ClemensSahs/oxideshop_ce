@@ -83,7 +83,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
     protected static function _addFilesToSuite( $oSuite, $aTestFiles )
     {
         foreach ( $aTestFiles as $sFilename ) {
-
+            echo "\n" . $sFilename . "\n";
             $sFilter = defined('PREG_FILTER') ? PREG_FILTER : false;
             if ( !$sFilter || preg_match("&$sFilter&i", $sFilename) ) {
 
