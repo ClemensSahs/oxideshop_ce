@@ -128,7 +128,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
             $oInterator = self::_getSuiteDirectories( $aTestDirectories );
         } else {
             var_dump($aTestDirectories);
-            $oInterator = array(self::_getDirectoryTree( $aTestDirectories ));
+            $oInterator = self::_getDirectoryTree( $aTestDirectories );
         }
 
         return $oInterator;
@@ -147,11 +147,11 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
         list( $sSuiteKey, $sSuiteTests ) = explode(':', $sTestSuiteParts);
         if ( !empty( $sSuiteTests ) ) {
             foreach ( explode('%', $sSuiteTests) as $sSubDirectory ) {
-                $sSubDirectory = ( $sSubDirectory == "_root_")? "" : '/'.$sSubDirectory;                $aDirectories[] = "${sSuiteKey}${sSubDirectory}";
-                $aDirectories[] = self::_getDirectoryTree("${sSuiteKey}${sSubDirectory}");
+                $sSubDirectory = ( $sSubDirectory == "_root_")? "" : '/'.$sSubDirectory;
+                $aDirectories[] = self::_getInteratorForDirectory("${sSuiteKey}${sSubDirectory}");
             }
         } else {
-            $aDirectories[] = self::_getDirectoryTree($sSuiteKey);
+            $aDirectories[] = self::_getInteratorForDirectory($sSuiteKey);
         }
 
         return new RecursiveArrayIterator($aDirectories);
@@ -165,7 +165,13 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
      */
     protected static function _getDirectoryTree( $aDirectories )
     {
-        return self::_getInteratorForDirectory($aDirectoryies);
+        $return = array();
+
+        foreach ( $aDirectories as $sDir ) {
+            $return[] = self::_getInteratorForDirectory($aDirectoryies);
+        }
+
+        return new RecursiveArrayIterator($return);
     }
 
     /**
