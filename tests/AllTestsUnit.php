@@ -82,28 +82,33 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
      */
     protected static function _addFilesToSuite( $oSuite, $aTestFiles )
     {
+        echo "\nstart:\n";
+
+
         foreach ( $aTestFiles as $sFilename ) {
             echo "\n" . $sFilename . "\n";
             $sFilter = defined('PREG_FILTER') ? PREG_FILTER : false;
             if ( !$sFilter || preg_match("&$sFilter&i", $sFilename) ) {
 
-                        include_once $sFilename;
+                include_once $sFilename;
 
-                        $sClassName = str_replace( __DIR__ . "/", "", $sFilename );
-                        $sClassName = str_replace( array( "/", ".php" ), array( "_", "" ), $sClassName );
+                $sClassName = str_replace( __DIR__ . "/", "", $sFilename );
+                $sClassName = str_replace( array( "/", ".php" ), array( "_", "" ), $sClassName );
 
-                        if ( class_exists( $sClassName ) ) {
-                            $oSuite->addTestSuite( $sClassName );
-                        } else {
+                if ( class_exists( $sClassName ) ) {
+                    $oSuite->addTestSuite( $sClassName );
+                } else {
                     if ( !isset( $blThrowException ) || $blThrowException ) {
                         echo "\n\nFile with wrong class name found!: $sClassName in $sFilename";
                         exit();
-                        }
                     }
                 }
             }
-        return $oSuite;
         }
+
+        echo "\nend:\n\n\n";
+        return $oSuite;
+      }
 
     /**
      * Returns array of directories, which should be tested
