@@ -353,6 +353,14 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
     /**
      * This method is called after the last test of this test class is run.
      */
+    public static function setUpBeforeClass()
+    {
+        echo "\n" . get_called_class() . ":\n";
+    }
+
+    /**
+     * This method is called after the last test of this test class is run.
+     */
     public static function tearDownAfterClass()
     {
         self::getSession()->cleanup();
