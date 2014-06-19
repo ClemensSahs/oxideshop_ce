@@ -168,7 +168,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
         $return = array();
 
         foreach ( $aDirectories as $sDir ) {
-            $return[] = self::_getInteratorForDirectory($aDirectoryies);
+            $return[] = self::_getInteratorForDirectory($sDir);
         }
 
         return new RecursiveArrayIterator($return);
