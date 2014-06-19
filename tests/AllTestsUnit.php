@@ -50,20 +50,19 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
      */
     public static function suite()
     {
-        $aInterators = self::_getTestDirectories();
-        $oArrayInterator = new RecursiveArrayIterator($aInterators);
-        $oRecursiveInterator = new RecursiveIteratorIterator($oArrayInterator);
+        $oArrayInterators = self::_getTestDirectories();
 
         $oSuite = new PHPUnit_Framework_TestSuite( 'PHPUnit' );
-
-        var_dump($oRecursiveInterator);
-        echo "\n\n";
         $pattern = self::getTestFileFilter();
-        foreach ( $oRecursiveInterator as $sDirectory ) {
-            $aTestFiles = self::_fileSearch(__DIR__ . "/$sDirectory", $pattern);
+
+        foreach ( $oArrayInterators as $oDirectoryInterator ) {
+
+            $oRecursiveInterator = new RecursiveIteratorIterator($oDirectoryInterator);
+
+            $aTestFiles = self::_fileSearch($oRecursiveInterator, $pattern);
 
             if ( empty( $aTestFiles ) ) {
-                continue;
+              continue;
             }
 
             printf("Adding %s unit tests from %s filtert by (%s)\n",
@@ -72,10 +71,11 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
                    $pattern);
 
             $oSuite = self::_addFilesToSuite( $oSuite, $aTestFiles );
-                }
+
+        }
 
         return $oSuite;
-                    }
+    }
 
     /**
      * Adds files to test suite
@@ -86,11 +86,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
      */
     protected static function _addFilesToSuite( $oSuite, $aTestFiles )
     {
-        echo "\nstart:\n";
-
-
         foreach ( $aTestFiles as $sFilename ) {
-            echo "\n" . $sFilename . "\n";
             $sFilter = defined('PREG_FILTER') ? PREG_FILTER : false;
             if ( !$sFilter || preg_match("&$sFilter&i", $sFilename) ) {
 
@@ -110,7 +106,6 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
             }
         }
 
-        echo "\nend:\n\n\n";
         return $oSuite;
       }
 
@@ -128,7 +123,6 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
             $aTestDirectories = explode(',', TEST_DIRS );
             $oInterator = self::_getSuiteDirectories( $aTestDirectories );
         } else {
-            var_dump($aTestDirectories);
             $oInterator = self::_getDirectoryTree( $aTestDirectories );
         }
 
@@ -169,7 +163,7 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
         $return = array();
 
         foreach ( $aDirectories as $sDir ) {
-            $return[] = self::_getInteratorForDirectory($sDir);
+            $return[] = self::_getInteratorForDirectory(__DIR__ . "/$sDir");
         }
 
         return new RecursiveArrayIterator($return);
@@ -196,12 +190,12 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
     /**
      * found on http://thephpeffect.com/recursive-glob-vs-recursive-directory-iterator/
      */
-    protected static function _fileSearch($directoryInterator, $pattern) {
-        if (! $directoryInterator instanceof \Iterator ) {
-            $directoryInterator = new DirectoryIterator($directoryInterator);
+    protected static function _fileSearch($oDirectoryInterator, $pattern) {
+        if (! $oDirectoryInterator instanceof \Iterator) {
+            $oDirectoryInterator = new DirectoryIterator($oDirectoryInterator);
         }
 
-        $files = new RegexIterator($directoryInterator, $pattern, RegexIterator::GET_MATCH);
+        $files = new RegexIterator($oDirectoryInterator, $pattern, RegexIterator::GET_MATCH);
         $fileList = array();
         foreach($files as $file) {
             $fileList = array_merge($fileList, $file);
