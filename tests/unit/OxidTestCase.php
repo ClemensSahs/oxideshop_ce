@@ -363,6 +363,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
      */
     public static function tearDownAfterClass()
     {
+        echo "\n" . get_called_class() . "::tearDownAfterClass()\n";
         self::getSession()->cleanup();
         self::getConfig()->cleanup();
 
