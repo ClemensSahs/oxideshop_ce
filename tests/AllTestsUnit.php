@@ -50,9 +50,9 @@ class AllTestsUnit extends PHPUnit_Framework_TestCase
      */
     public static function suite()
     {
-        $oInterator = self::_getTestDirectories();
-        $oRecursiveInterator = new RecursiveArrayIterator($oInterator);
-        $oRecursiveInterator = new RecursiveIteratorIterator($oInterator);
+        $aInterators = self::_getTestDirectories();
+        $oArrayInterator = new RecursiveArrayIterator($aInterators);
+        $oRecursiveInterator = new RecursiveIteratorIterator($oArrayInterator);
 
         $oSuite = new PHPUnit_Framework_TestSuite( 'PHPUnit' );
 
