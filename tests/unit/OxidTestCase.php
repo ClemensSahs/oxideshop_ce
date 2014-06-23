@@ -350,10 +350,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
         oxUtilsObject::resetClassInstances();
         oxUtilsObject::resetModuleVars();
 
-        echo "\n" . get_called_class() . "::tearDown(before)\n";
         parent::tearDown();
-
-        echo "\n" . get_called_class() . "::tearDown(after)\n";
     }
 
     /**
