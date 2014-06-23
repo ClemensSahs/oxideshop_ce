@@ -281,6 +281,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        echo "\n" . get_called_class() . "::setup(before)\n";
         $this->_aBackup['_SERVER'] = $_SERVER;
         $this->_aBackup['_POST'] = $_POST;
         $this->_aBackup['_GET'] = $_GET;
@@ -301,7 +302,7 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
         error_reporting((E_ALL ^ E_NOTICE) | E_STRICT);
         ini_set('display_errors', true);
 
-        echo "\n" . get_called_class() . "::setup()\n";
+        echo "\n" . get_called_class() . "::setup(after)\n";
     }
 
     /**
