@@ -300,6 +300,8 @@ class OxidTestCase extends PHPUnit_Framework_TestCase
         oxUtils::getInstance()->cleanStaticCache();
         error_reporting((E_ALL ^ E_NOTICE) | E_STRICT);
         ini_set('display_errors', true);
+
+        echo "\n" . get_called_class() . "::setup()\n";
     }
 
     /**
